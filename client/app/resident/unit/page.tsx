@@ -85,7 +85,7 @@ export default function ResidentUnitPage() {
 
   const finishes: Finishes = unitType?.finishes || {};
   const amenities: Amenities = unitType?.amenities || {};
-  const activeAmenities = Object.entries(amenities).filter(([_, v]) => v && v !== false);
+  const activeAmenities = Object.entries(amenities).filter(([_, v]) => v !== undefined && v !== false);
 
   return (
     <div className='p-4 space-y-4'>
