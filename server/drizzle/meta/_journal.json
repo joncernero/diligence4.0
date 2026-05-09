@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1776276938652,
+      "tag": "0000_parched_toxin",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1746576000000,
+      "tag": "0001_multi_tenant_isolation",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1778118907550,
+      "tag": "0002_hard_skaar",
+      "breakpoints": true
+    }
+  ]
+}
