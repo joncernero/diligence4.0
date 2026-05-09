@@ -49,7 +49,6 @@ router.post('/', requireAuth, requireRole(['admin', 'pm', 'super']), async (req:
       buildingNumber,
       buildingName: buildingName || null,
       floors: floors || null,
-      unitsPerFloor: unitsPerFloor || null,
       totalUnits: totalUnits || null,
       squareFootage: squareFootage || null,
     }).returning();

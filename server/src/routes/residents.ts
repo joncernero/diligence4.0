@@ -168,7 +168,7 @@ router.post('/accept-invite', async (req, res) => {
     const jwtToken = jwt.sign(
       { id: newUser.id, email: newUser.userEmail, role: 'resident' },
       process.env.JWT_SECRET!,
-      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' } as jwt.SignOptions
     );
 
     res.status(201).json({

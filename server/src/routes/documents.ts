@@ -206,13 +206,13 @@ router.post('/:id/new-version', requireAuth, upload.single('file'), async (req: 
     // Archive current version
     await db.insert(documentVersions).values({
       documentId: docId,
-      versionNumber: currentDoc.version,
+      versionNumber: currentDoc.version ?? 1,
       fileUrl: currentDoc.fileUrl,
       fileKey: currentDoc.fileKey,
       fileName: currentDoc.fileName,
       fileSize: currentDoc.fileSize,
       uploadedBy: currentDoc.uploadedBy!,
-      uploadedAt: currentDoc.uploadedAt,
+      uploadedAt: currentDoc.uploadedAt ?? undefined,
     });
 
     // Upload new file
@@ -227,7 +227,7 @@ router.post('/:id/new-version', requireAuth, upload.single('file'), async (req: 
         fileName: file.originalname,
         fileSize: file.size,
         mimeType: file.mimetype,
-        version: currentDoc.version + 1,
+        version: (currentDoc.version ?? 1) + 1,
         uploadedBy: req.user!.id,
         uploadedAt: new Date(),
         updatedAt: new Date(),
