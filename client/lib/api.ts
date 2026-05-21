@@ -1,13 +1,12 @@
 import axios from 'axios';
 
-// In the browser, use the same hostname the app is served from (port 4000)
-// so the API works regardless of which local IP address the machine has today.
-// Falls back to env var (for production deployments) or localhost (for dev).
-const API_URL =
+// Ensure the base URL always ends with /api regardless of how the env var is set.
+const rawUrl =
   process.env.NEXT_PUBLIC_API_URL ||
   (typeof window !== 'undefined'
-    ? `http://${window.location.hostname}:4000/api`
-    : 'http://localhost:4000/api');
+    ? `http://${window.location.hostname}:4000`
+    : 'http://localhost:4000');
+const API_URL = rawUrl.replace(/\/api\/?$/, '') + '/api';
 
 export const api = axios.create({
   baseURL: API_URL,
