@@ -1,5 +1,5 @@
 // Diligence Service Worker
-const CACHE_NAME = 'diligence-v2';
+const CACHE_NAME = 'diligence-v3';
 
 // Only pre-cache the login page — dashboard requires auth and will redirect
 const PRECACHE_URLS = ['/login'];
