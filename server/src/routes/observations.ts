@@ -7,7 +7,7 @@ import {
   observationComments,
 } from '../schema/walks';
 import { requireAuth, AuthRequest } from '../middleware/auth';
-import { eq, and, desc } from 'drizzle-orm';
+import { eq, and, desc, inArray } from 'drizzle-orm';
 import { uploadToR2, generateFileKey } from '../utils/r2Upload';
 import { createNotification } from '../utils/notifications';
 import { sendEmail, emailTemplates } from '../utils/email';
@@ -27,13 +27,22 @@ router.get('/', requireAuth, async (req: AuthRequest, res) => {
   try {
     const { walkId, projectId, status } = req.query;
 
-    if (!walkId && !projectId) {
-      return res.status(400).json({ error: 'walkId or projectId is required' });
-    }
-
     // Build where clause — always enforce org isolation via projectId linkage
     let whereClause;
-    if (walkId) {
+    if (!walkId && !projectId) {
+      // No scope given (e.g. dashboard summary view) — fall back to every
+      // observation across the requesting user's org, never cross-org.
+      const { projects } = await import('../schema/projects');
+      const orgProjects = await db.query.projects.findMany({
+        where: eq(projects.orgId, req.user!.orgId!),
+        columns: { id: true },
+      });
+      const projectIds = orgProjects.map((p) => p.id);
+      if (projectIds.length === 0) {
+        return res.json({ observations: [] });
+      }
+      whereClause = inArray(observations.projectId, projectIds);
+    } else if (walkId) {
       // Verify the walk belongs to this org before returning its observations
       const { propertyWalks } = await import('../schema/walks');
       const walk = await db.query.propertyWalks.findFirst({
